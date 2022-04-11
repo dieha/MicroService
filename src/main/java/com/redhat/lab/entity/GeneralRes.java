@@ -12,8 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LoginRes {
-
-	private String token;
-
+public class GeneralRes {
+	private String returnCode;
+	private String returnMsg;
+	private Object entity;
 }
