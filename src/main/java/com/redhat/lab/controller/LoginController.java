@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.redhat.lab.entity.Account;
 import com.redhat.lab.entity.GeneralRes;
 import com.redhat.lab.entity.JwtAccount;
-import com.redhat.lab.entity.LoginReq;
 import com.redhat.lab.entity.LoginRes;
 import com.redhat.lab.usecase.LoginServiceImp;
 import com.redhat.lab.util.AccessAddressUtils;
@@ -30,12 +30,12 @@ public class LoginController {
 	JwtTokenUtil jwtTokenUtil;
 
 	@PostMapping("/login")
-	public GeneralRes loginJwt(HttpServletRequest reauest,@Valid  @RequestBody LoginReq req) {
+	public GeneralRes loginJwt(HttpServletRequest reauest, @Valid @RequestBody Account account) {
 
 		try {
-			if (loginService.login(req.getAccount(), req.getPassword())) {
+			if (loginService.login(account.getIdentity(),account.getAccount(), account.getPassword())) {
 				String ip = AccessAddressUtils.getIpAddress(reauest);
-				final String token = jwtTokenUtil.createAccessToken(new JwtAccount(req.getAccount(), ip));
+				final String token = jwtTokenUtil.createAccessToken(new JwtAccount(account.getAccount(), ip));
 				return new GeneralRes("000", "ok", new LoginRes(token));
 			}
 

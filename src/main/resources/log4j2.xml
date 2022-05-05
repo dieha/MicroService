@@ -13,25 +13,12 @@
 				disableAnsi="false" noConsoleNoAnsi="false" />
 		</Console>
 
-		<!--json格式error級別日誌 -->
-		<RollingFile name="errorJsonAppender"
-			fileName="${LOG_HOME}/error-json.log"
-			filePattern="${LOG_HOME}/error-json-%d{yyyy-MM-dd}-%i.log.gz">
-			<JSONLayout compact="true" eventEol="true"
-				locationInfo="true" />
-			<Policies>
-				<SizeBasedTriggeringPolicy size="100 MB" />
-				<TimeBasedTriggeringPolicy interval="1"
-					modulate="true" />
-			</Policies>
-		</RollingFile>
 	</Appenders>
 
 	<Loggers>
 		<!-- 根日誌設定 -->
 		<Root level="info">
 			<AppenderRef ref="consoleAppender" level="info" />
-			<AppenderRef ref="errorJsonAppender" level="error" />
 		</Root>
 
 	</Loggers>

@@ -1,26 +1,34 @@
 package com.redhat.lab.usecase;
 
+import java.util.Base64;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
-import com.redhat.lab.config.JwtConfig;
-import com.redhat.lab.util.JwtTokenUtil;
+import com.redhat.lab.dao.AccoountDao;
+import com.redhat.lab.entity.Account;
 
 @Service
 public class LoginServiceImp implements LoginService {
 
 	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-
-	@Autowired
-	private JwtConfig jwtConfig;
+	private AccoountDao accoountDao;
+	
 
 	@Override
-	public boolean login(String account, String password) {
+	public boolean login(String identity, String account, String password) {
 
-		if ("admin".equals(account) && "password".equals(password)) {
-
-			return true;
+		Optional<Account> optional = accoountDao.findOne(Example.of(Account.of(identity,account)));
+		if (optional.isPresent()) {
+			Account accountDB = optional.get();
+			String pwd=new String(Base64.getUrlDecoder().decode(password));
+			if (account.equals(accountDB.getAccount()) && pwd.endsWith(accountDB.getPassword())) {
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

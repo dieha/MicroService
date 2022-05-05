@@ -11,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.redhat.lab.util.JWTAuthenticationFilter;
+import com.redhat.lab.util.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		httpSecurity.headers().frameOptions().disable();
 		httpSecurity.headers().cacheControl();
-		httpSecurity.addFilterBefore(new JWTAuthenticationFilter(authenticationManager()),
+		httpSecurity.addFilterBefore(new JwtAuthenticationFilter(authenticationManager()),
 				UsernamePasswordAuthenticationFilter.class);
 	}
 }

@@ -14,13 +14,11 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoginReq {
 
+	@NotNull(message = "identity is mandatory")
+	private String identity;
 	@NotNull(message = "account is mandatory")
-	@Min(1)
-	@Max(20)
 	private String account;
 	@NotNull(message = "password is mandatory")
-	@Min(1)
-	@Max(20)
 	private String password;
 
 }

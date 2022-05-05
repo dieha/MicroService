@@ -20,12 +20,12 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import com.redhat.lab.config.JwtConfig;
 import com.redhat.lab.entity.JwtAccount;
 
-public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
+public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
 	JwtConfig jwtConfig;
 	JwtTokenUtil jwtTokenUtil;
 
-	public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+	public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
 		super(authenticationManager);
 		this.jwtConfig = SpringUtil.getBean(JwtConfig.class);
 		this.jwtTokenUtil = SpringUtil.getBean(JwtTokenUtil.class);
