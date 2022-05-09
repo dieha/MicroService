@@ -33,16 +33,17 @@ public class LoginController {
 	public GeneralRes loginJwt(HttpServletRequest reauest, @Valid @RequestBody Account account) {
 
 		try {
-			if (loginService.login(account.getIdentity(),account.getAccount(), account.getPassword())) {
+			account = loginService.login(account.getIdentity(), account.getAccount(), account.getPassword());
+			if (account != null) {
 				String ip = AccessAddressUtils.getIpAddress(reauest);
-				final String token = jwtTokenUtil.createAccessToken(new JwtAccount(account.getAccount(), ip));
-				return new GeneralRes("000", "ok", new LoginRes(token));
+				final String token = jwtTokenUtil.createAccessToken(new JwtAccount(account.getAccount(),account.getAccountId().toString(), ip));
+				return new GeneralRes("000", "ok", new LoginRes(account.getAccountId().toString(), token));
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new GeneralRes("500", "", null);
+		return new GeneralRes("500", "error", null);
 	}
 
 	@GetMapping("/index")
@@ -57,9 +58,4 @@ public class LoginController {
 		return "10";
 	}
 
-	@GetMapping("/logins")
-	public LoginRes logins(HttpServletRequest reauest) {
-
-		return new LoginRes("test");
-	}
 }

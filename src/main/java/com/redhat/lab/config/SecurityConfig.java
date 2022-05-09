@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// options全部放行
 		// post 放行
 		httpSecurity.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests().antMatchers("/login", "/h2/*").permitAll().antMatchers(HttpMethod.PUT)
+				.authorizeRequests().antMatchers("/login", "/h2/*","/actuator/**").permitAll().antMatchers(HttpMethod.PUT)
 				.authenticated().antMatchers(HttpMethod.DELETE).authenticated().antMatchers(HttpMethod.GET)
 				.authenticated().antMatchers(HttpMethod.POST).authenticated();
 
