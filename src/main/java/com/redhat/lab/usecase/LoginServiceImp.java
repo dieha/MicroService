@@ -18,19 +18,19 @@ public class LoginServiceImp implements LoginService {
 	
 
 	@Override
-	public boolean login(String identity, String account, String password) {
+	public Account login(String identity, String account, String password) {
 
 		Optional<Account> optional = accoountDao.findOne(Example.of(Account.of(identity,account)));
 		if (optional.isPresent()) {
 			Account accountDB = optional.get();
 			String pwd=new String(Base64.getUrlDecoder().decode(password));
 			if (account.equals(accountDB.getAccount()) && pwd.endsWith(accountDB.getPassword())) {
-				return true;
+				return accountDB;
 			} else {
-				return false;
+				return null;
 			}
 		} else {
-			return false;
+			return null;
 		}
 	}
 

@@ -10,6 +10,7 @@ import lombok.Setter;
 public class JwtAccount {
 	
 	private final String account;
+	private final String accountId;
 	private final String ip;
 
 }

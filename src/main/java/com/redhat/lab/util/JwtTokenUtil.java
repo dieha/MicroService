@@ -73,7 +73,7 @@ public class JwtTokenUtil {
 				Claims claims = Jwts.parser().setSigningKey(jwtConfig.getSecret()).parseClaimsJws(token).getBody();
 
 				// 用户信息
-				account = new JwtAccount(claims.getId(), claims.get("ip").toString());
+				account = new JwtAccount(claims.getId(),claims.get("accountId").toString(), claims.get("ip").toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
