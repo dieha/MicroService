@@ -53,7 +53,9 @@ public class JwtTokenUtil {
 				.setIssuedAt(new Date())//
 				.setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration())) // 过期时间
 				.signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret()) // 签名算法、密钥
-				.claim("ip", account.getIp()).compact();
+				.claim("accountId", account.getAccountId())
+				.claim("ip", account.getIp())
+				.compact();
 		return jwtConfig.getTokenPrefix() + token;
 	}
 
@@ -71,7 +73,7 @@ public class JwtTokenUtil {
 
 				// 解析Token
 				Claims claims = Jwts.parser().setSigningKey(jwtConfig.getSecret()).parseClaimsJws(token).getBody();
-
+System.out.println(claims);
 				// 用户信息
 				account = new JwtAccount(claims.getId(),claims.get("accountId").toString(), claims.get("ip").toString());
 			} catch (Exception e) {
