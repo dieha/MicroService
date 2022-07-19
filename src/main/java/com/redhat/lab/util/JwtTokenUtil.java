@@ -14,7 +14,9 @@ import com.redhat.lab.entity.JwtAccount;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Service
 public class JwtTokenUtil {
 
@@ -23,9 +25,6 @@ public class JwtTokenUtil {
 	@Autowired
 	private JwtConfig jwtConfig;
 
-	/**
-	 * 从token中获取过期时间
-	 */
 	public Date getExpirationDateFromToken(String token) {
 		Date expiration;
 		try {
@@ -48,22 +47,14 @@ public class JwtTokenUtil {
 	}
 
 	public String createAccessToken(JwtAccount account) {
-		String token = Jwts.builder()// 设置JWT
-				.setId(account.getAccount()) // 用户Id
-				.setIssuedAt(new Date())//
-				.setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration())) // 过期时间
-				.signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret()) // 签名算法、密钥
-				.claim("accountId", account.getAccountId())
-				.claim("ip", account.getIp())
-				.compact();
+		String token = Jwts.builder().setId(account.getAccount()).setIssuedAt(new Date())//
+				.setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration())) // 過期時間
+				.signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret()) // 加密
+				.claim("accountId", account.getAccountId()).claim("ip", account.getIp()).compact();
 		return jwtConfig.getTokenPrefix() + token;
 	}
 
-//	
-//	public static String refreshAccessToken(String oldToken) {
-//
-//		return createAccessToken(account);
-//	}
+	
 	public JwtAccount parseAccessToken(String token) {
 		JwtAccount account = null;
 		if (StringUtils.hasLength(token)) {
@@ -73,11 +64,11 @@ public class JwtTokenUtil {
 
 				// 解析Token
 				Claims claims = Jwts.parser().setSigningKey(jwtConfig.getSecret()).parseClaimsJws(token).getBody();
-System.out.println(claims);
 				// 用户信息
-				account = new JwtAccount(claims.getId(),claims.get("accountId").toString(), claims.get("ip").toString());
+				account = new JwtAccount(claims.getId(), claims.get("accountId").toString(),
+						claims.get("ip").toString());
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.info("Jwt error", e);
 			}
 		}
 		return account;

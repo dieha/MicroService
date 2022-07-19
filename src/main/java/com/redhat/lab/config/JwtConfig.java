@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class JwtConfig {
-	public static final String REDIS_TOKEN_KEY_PREFIX = "TOKEN_";
 
 	private long expiration;
 	private long refreshTime; 

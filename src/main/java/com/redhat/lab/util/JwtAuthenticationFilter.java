@@ -20,19 +20,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.redhat.lab.config.JwtConfig;
 import com.redhat.lab.entity.JwtAccount;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	@Resource	
+	@Resource
 	JwtConfig jwtConfig;
-	@Resource	
+	@Resource
 	JwtTokenUtil jwtTokenUtil;
-
-//	public JwtAuthenticationFilter() {
-//		this.jwtConfig = SpringUtil.getBean(JwtConfig.class);
-//		this.jwtTokenUtil = SpringUtil.getBean(JwtTokenUtil.class);
-//
-//	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -41,18 +38,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String token = request.getHeader(jwtConfig.getTokenHeader());
 
 		if (token != null && token.startsWith(jwtConfig.getTokenPrefix())) {
+			try {
 
-			JwtAccount jwtAccount = jwtTokenUtil.parseAccessToken(token);
-			Set<GrantedAuthority> authorities = new HashSet<>();
+				JwtAccount jwtAccount = jwtTokenUtil.parseAccessToken(token);
+				if (jwtAccount != null) {
+					Set<GrantedAuthority> authorities = new HashSet<>();
 
-			authorities.add(new SimpleGrantedAuthority("ROLE_" + "admin"));
+					authorities.add(new SimpleGrantedAuthority("ROLE_" + "admin"));
 
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtAccount,
-					jwtAccount.getAccount(), authorities);
-			
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+							jwtAccount, jwtAccount.getAccount(), authorities);
+
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				}
+			} catch (Exception e) {
+				log.debug("Jwt fillter",e);
+			}
 		}
-		
+
 		filterChain.doFilter(request, response);
 	}
 

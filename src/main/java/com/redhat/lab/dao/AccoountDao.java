@@ -8,5 +8,5 @@ import com.redhat.lab.entity.Account;
 
 
 @Repository
-public interface AccoountDao extends JpaRepository<Account, String> {
+public interface AccoountDao extends JpaRepository<Account, Long> {
 }

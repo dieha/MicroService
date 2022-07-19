@@ -14,11 +14,10 @@
 		</Console>
 
 	</Appenders>
-
 	<Loggers>
 		<!-- 根日誌設定 -->
 		<Root level="info">
-			<AppenderRef ref="consoleAppender" level="info" />
+			<AppenderRef ref="consoleAppender" />
 		</Root>
 
 	</Loggers>
